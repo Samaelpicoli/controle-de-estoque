@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <style>
+        .ok {
+            color: green;
+        }
+        .no {
+            color: red;
+        }
+    </style>
+
+{% endblock css %}
+
+{% block conteudo %}
+
+<div class="page-header">
+    <h2><i class="fa fa-user"></i>Lista de Prdutos</h2>
+    {% if lista_objetos %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Importado</th>
+                    <th>NCM</th>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                    <th class="text-center">Estoque</th>
+                    <th class="text-center">Estoque Mínimo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for objeto in lista_objetos %}
+                    <tr>
+                        <td class="text-center">
+                            {% if objeto.importado %}
+                                <i class="fa fa-check-circle ok"></i>
+                            {% else %}
+                                <i class="fa fa-minus-circle no"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ objeto.ncm }}</td>
+                        <td>{{ objeto.produto }}</td>
+                        <td>R$ <span class="pull-right">{{ objeto.preco }}</span></td>
+                        <td class="text-center">{{ objeto.estoque }}</td>
+                        <td class="text-center">{{ objeto.estoque_minimo }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-warning">Sem itens na lista</p>
+    {% endif %}
+</div>
+
+{% endblock conteudo %}
