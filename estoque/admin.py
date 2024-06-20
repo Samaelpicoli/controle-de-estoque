@@ -42,7 +42,7 @@ class EstoqueAdmin(admin.ModelAdmin):
         de administração de Estoque.
     """
     inlines = (EstoqueItensInline,)
-    list_display = ('__str__', 'nf')
+    list_display = ('__str__', 'nf', 'funcionario',)
     search_fields = ('nf',)
     list_filter = ('funcionario', )
     date_hierarchy = 'criado_em'

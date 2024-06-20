@@ -51,6 +51,17 @@ class Estoque(TimeStampModel):
         return f'{self.pk}'
     
 
+    def nf_formato(self):
+        """
+        Formata o número da nota fiscal com 0 na frente caso não
+        ter a quantia de caracteres necessárias.
+
+        Returns:
+            str: a nota fiscal formatada.
+        """
+        return str(self.nf).zfill(3)
+    
+
 class EstoqueItens(models.Model):
     """
     Modelo que representa os itens de um registro de movimento 
