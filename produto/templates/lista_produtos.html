@@ -4,7 +4,16 @@
 {% block conteudo %}
 
 <div class="page-header">
-    <h2><i class="fa fa-user"></i>Lista de Prdutos</h2>
+    <h2>Lista de Prdutos
+        <span class="pull-right">
+            <a href="{% url 'produto:adicionar_produto' %}">
+                <button type="button" class="btn btn-primary">
+                    <span class="fa fa-plus"></span> Adicionar
+                </button>
+            </a>
+        </span>
+    </h2>
+
     {% if lista_objetos %}
         <table class="table table-striped">
             <thead>

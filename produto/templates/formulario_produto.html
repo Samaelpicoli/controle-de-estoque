@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+<!-- Carrega a biblioteca widget_tweaks para customizar widgets de formulários -->
+{% load widget_tweaks %}
+
+{% block css %}
+    <style>
+        span.required:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+
+{% endblock css %}
+
+<!-- Início do bloco 'conteudo' que será inserido no 'base.html' -->
+{% block conteudo %}
+
+<form method="POST" novalidate>
+    <!-- Início do formulário. O método POST é usado para enviar dados ao servidor -->
+    <!-- Adiciona um token CSRF oculto ao formulário. O CSRF (Cross-Site Request Forgery) 
+    é uma medida de segurança que protege contra ataques CSRF, garantindo que os 
+    dados do formulário sejam enviados a partir da sua aplicação e 
+    não de uma fonte externa maliciosa. -->
+    {% csrf_token %}
+    <!-- Token CSRF para proteger contra ataques CSRF -->
+    {% for field in form.visible_fields %}
+        <div class="form-group{% if field.errors %} has-error {% endif %}">
+            <label for="{{ field.id_for_label }}">
+                {% if field.field.required %}
+                    <span class="required">{{ field.label }} </span>
+                {% else %}
+                    {{ field.label }}
+                {% endif %}
+            </label>
+            {% render_field field class="form-control" %}
+            {% for error in field.errors %}
+                <span class="text-muted">{{ error }}</span>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Cadastrar</button>
+</form>
+
+{% endblock conteudo %}
+<!-- Fim do bloco 'conteudo' -->
+
+
+{% block js %}
+    <script>
+        $('#id_importado').removeClass('form-control')
+    </script>
+
+{% endblock js %}

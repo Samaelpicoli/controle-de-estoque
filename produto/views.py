@@ -1,6 +1,10 @@
 from django.shortcuts import render
 
+from django.views.generic import CreateView
+
 from .models import Produto
+
+from .forms import ProdutoForm
 
 # Create your views here.
 
@@ -50,3 +54,23 @@ def detalhe_produto(request, pk):
 
     # Renderiza o template com o contexto
     return render(request, template_name=nome_template, context=contexto)
+
+
+def adicionar_produto(request):
+    nome_template = 'formulario_produto.html'
+    return render(request, template_name=nome_template)
+
+
+class CriarProduto(CreateView):
+    """
+    View baseada em classe para criar um novo produto.
+
+    Atributos:
+        model (Model): O modelo que será utilizado na view.
+        template_name (str): O nome do template que será renderizado.
+        form_class (Form): O formulário que será utilizado 
+        para criar o objeto.
+    """
+    model = Produto
+    template_name = 'formulario_produto.html'
+    form_class = ProdutoForm

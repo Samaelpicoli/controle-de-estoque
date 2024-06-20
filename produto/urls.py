@@ -11,5 +11,8 @@ urlpatterns = [
     path('', views.lista_produtos, name='lista_produtos'),
     # URL para a view de detalhe de um produto específico
     path('<int:pk>/', views.detalhe_produto, name='detalhe_produto'),
-
+    # URL para a view de formulário para adicionar um novo produto
+    # com uma classe, utilizo o método as_view() para a chamada
+    path('adicionar/', views.CriarProduto.as_view(), name='adicionar_produto'),
+    
 ]
