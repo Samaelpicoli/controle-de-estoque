@@ -14,5 +14,11 @@ urlpatterns = [
     # URL para a view de formulário para adicionar um novo produto
     # com uma classe, utilizo o método as_view() para a chamada
     path('adicionar/', views.CriarProduto.as_view(), name='adicionar_produto'),
-    
+    # URL para editar um produto, com classe based views
+    path(
+        '<int:pk>/editar/', 
+        views.EditarProduto.as_view(),
+        name='editar_produto'
+    ),
+
 ]

@@ -6,7 +6,7 @@
 
 <h1>
 {{ objeto }}
-<span class="pull-right"><a href="">
+<span class="pull-right"><a href="{% url 'produto:editar_produto' objeto.pk %}">
     <button type="button" class="btn btn-success">
         <span class="fa fa-pecil"></span>Editar
     </button>

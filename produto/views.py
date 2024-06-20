@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from .models import Produto
 
@@ -64,6 +64,21 @@ def adicionar_produto(request):
 class CriarProduto(CreateView):
     """
     View baseada em classe para criar um novo produto.
+
+    Atributos:
+        model (Model): O modelo que será utilizado na view.
+        template_name (str): O nome do template que será renderizado.
+        form_class (Form): O formulário que será utilizado 
+        para criar o objeto.
+    """
+    model = Produto
+    template_name = 'formulario_produto.html'
+    form_class = ProdutoForm
+
+
+class EditarProduto(UpdateView):
+    """
+    View baseada em classe para editar um produto.
 
     Atributos:
         model (Model): O modelo que será utilizado na view.
