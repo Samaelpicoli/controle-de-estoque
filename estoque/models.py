@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.urls import reverse_lazy
+
 from django.contrib.auth.models import User
 
 from core.models import TimeStampModel
@@ -61,6 +63,19 @@ class Estoque(TimeStampModel):
         """
         return str(self.nf).zfill(3)
     
+    def get_absolute_url(self):
+        """
+        Retorna a URL absoluta para o detalhe de uma entrada do estoque
+        específico.
+        
+        Returns:
+            str: A URL para a visualização de detalhe da entrada
+            no estoque.
+        """
+        return reverse_lazy(
+            'estoque:detalhes_estoque_entrada', 
+            kwargs={'pk':self.pk}
+        )
 
 class EstoqueItens(models.Model):
     """
@@ -76,8 +91,11 @@ class EstoqueItens(models.Model):
         saldo (PositiveIntegerField): Saldo atual do produto após 
         a movimentação.
     """
-
-    estoque = models.ForeignKey(Estoque, on_delete=models.CASCADE)
+    estoque = models.ForeignKey(
+        Estoque, 
+        on_delete=models.CASCADE, 
+        related_name='estoques'
+    )
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField()
     saldo = models.PositiveIntegerField()
