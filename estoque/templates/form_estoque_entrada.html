@@ -1,0 +1,128 @@
+<!-- Template para o formulário de entrada no estoque.
+Este template estende o base.html, carrega alguns filtros e widgets 
+para manipulação de campos de formulário,
+e inclui a lógica para adicionar dinamicamente itens ao 
+formset de estoque usando JavaScript. -->
+
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% load bootstrap %}
+
+{% block css %}
+    <!-- Estilo para indicar campos obrigatórios -->
+    <style>
+        span.required:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+
+{% endblock css %}
+
+{% block conteudo %}
+
+<!-- Link para voltar à lista de entradas no estoque -->
+<a href="{% url 'estoque:add_estoque_entrada' %}">Voltar</a>
+
+<div class="row">
+    <div class="col-sm-6">
+        <form method="POST" novalidate>
+            <!-- Token CSRF para proteger o formulário contra ataques CSRF -->
+            {% csrf_token %}
+            <legend style="border-bottom: 1px solid #e5e5e5;">Entrada no Estoque</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <!-- Loop através dos campos visíveis do formulário principal -->
+                    {% for field in form.visible_fields %}
+                        <div class="form-group{% if field.errors %} has-error {% endif %}">
+                            <label for="{{ field.id_for_label }}">
+                                {% if field.field.required %}
+                                    <span class="required">{{ field.label }} </span>
+                                {% else %}
+                                    {{ field.label }}
+                                {% endif %}
+                            </label>
+                            <!-- Renderiza o campo do formulário com a classe CSS 'form-control' -->
+                            {% render_field field class="form-control" %}
+                            <!-- Exibe mensagens de erro para o campo, se houver -->
+                            {% for error in field.errors %}
+                                <span class="text-muted">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <!-- Renderiza o formulário de gerenciamento do formset -->
+                {{ formset.management_form }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <legend style="border-bottom: 1px solid #e5e5e5;">Produtos</legend>
+                    <div id="estoque" class="form-inline">
+                        <!-- Loop através dos formulários de itens de estoque no formset -->
+                        {% for item_estoque_form in formset %}
+                            <div id="item-{{ forloop.counter0 }}" class="form-group">
+                                {{ item_estoque_form|bootstrap }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <span id="add-item" class="btn btn-info" style="margin-top: 10px;">
+                <i class="fa fa-plus"></i> Adicionar
+            </span>
+
+            <div class="row float-right">
+                <div class="col-sm-12" style="margin-top: 10px;">
+                    <div class="form-inline buttons">
+                        <button class="btn btn-primary" value="Salvar">
+                            <i class="fa fa-floppy-o"></i> 
+                            Salvar
+                        </button>
+                        <a href="{% url 'estoque:lista_estoque_entrada' %}" class="btn btn-danger">
+                            <i class="fa fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock conteudo %}
+
+{% block js %}
+
+<script>
+    // Função para adicionar novos itens ao formset de estoque ao clicar no botão
+    $(document).ready(function(){
+        $('#add-item').click(function(ev) {
+            ev.preventDefault();
+            var count = $('#estoque').children().length; // Conta os itens atuais no formset
+            var tmpltMarkup = $('#item-estoque').html(); // Pega o template do novo item
+
+            // Substitui o prefixo pelo índice atual
+            var compiledTmpl = tmpltMarkup.replace(/__prefix__/g, count); 
+            $('div#estoque').append(compiledTmpl); // Adiciona o novo item ao formset
+            
+            // Atualiza o valor do total de formulários
+            $('#id_estoque-TOTAL_FORMS').attr('value', count+1)
+            
+            // Animação para rolar a página até o novo item adicionado
+            $('html, body').animate({
+                scrollTop: $('#add-item').position().top - 200
+            }, 800)
+        });
+    });
+</script>
+
+<script type="text/html" id="item-estoque">
+    <!-- Template HTML para novos itens do formset de estoque -->
+    <div id="item-__prefix__" class="form-group" style="margin-top: 10px;">
+        {{ formset.empty_form|bootstrap }}
+    </div>
+
+</script>
+
+{% endblock js %}

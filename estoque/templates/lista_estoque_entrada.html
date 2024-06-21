@@ -14,7 +14,8 @@ Se não houver objetos, exibe uma mensagem de aviso. -->
 
 <h2>Estoque Entrada
     <span class="pull-right">
-        <a href="">
+        <!-- Direciona para a rota de adicionar uma nova entrada -->
+        <a href="{% url 'estoque:add_estoque_entrada' %}">
             <button type="button" class="btn btn-primary">
                 <span class="fa fa-plus"></span>
                 Adicionar
