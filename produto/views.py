@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from django.views.generic import CreateView, UpdateView
 
+from django.http import JsonResponse
+
 from .models import Produto
 
 from .forms import ProdutoForm
@@ -89,3 +91,25 @@ class EditarProduto(UpdateView):
     model = Produto
     template_name = 'formulario_produto.html'
     form_class = ProdutoForm
+
+
+def produto_json(request, pk):
+    """
+    Retorna os dados de um produto específico em formato JSON.
+
+    Este método filtra o produto com base na chave primária 
+    fornecida (pk), converte os dados principais do produto 
+    em um formato de dicionário utilizando o método `dict_to_json`
+    e retorna os dados como uma resposta JSON.
+
+    Args:
+        request (HttpRequest): O objeto de requisição HTTP.
+        pk (int): A chave primária do produto a ser recuperado.
+
+    Returns:
+        JsonResponse: Um objeto de resposta JSON contendo os 
+        dados do produto.
+    """
+    produto = Produto.objects.filter(pk=pk)
+    data = [item.dict_to_json() for item in produto]
+    return JsonResponse({'data': data})

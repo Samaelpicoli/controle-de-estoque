@@ -27,7 +27,7 @@ def lista_estoque_entrada(request):
     # Nome do template a ser renderizado
     nome_template = 'lista_estoque_entrada.html'
     
-    # Filtra os objetos do modelo Estoque onde movimento é 'e' (entrada)
+    # Filtra os objetos do modelo Estoque onde movimento é 'e entrada'
     objetos = Estoque.objects.filter(movimento='e')
     
     # Contexto a ser passado para o template

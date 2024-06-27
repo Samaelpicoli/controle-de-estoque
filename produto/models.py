@@ -55,3 +55,24 @@ class Produto(models.Model):
             str: A URL para a visualização de detalhe do produto.
         """
         return reverse_lazy('produto:detalhe_produto', kwargs={'pk':self.pk})
+    
+
+    def dict_to_json(self):
+        """
+        Retorna um dicionário representando os dados do produto
+        para conversão em JSON.
+
+        Este método é utilizado para serializar os dados principais
+        do produto em um formato de dicionário, adequado para 
+        conversão em JSON, facilitando a integração com APIs ou 
+        outras funcionalidades que requeiram dados em formato JSON.
+
+        Returns:
+            dict: Um dicionário contendo o identificador primário (pk), 
+            o nome do produto, e a quantidade de estoque.
+        """
+        return {
+            'pk': self.pk,
+            'produto': self.produto,
+            'estoque': self.estoque,
+        }
