@@ -4,6 +4,8 @@ from django.forms import inlineformset_factory
 
 from django.http import HttpResponseRedirect
 
+from produto.models import Produto
+
 from .models import Estoque, EstoqueItens
 
 from .forms import EstoqueForm, EstoqueItensForm
@@ -122,6 +124,11 @@ def add_estoque_entrada(request):
             # para a página de detalhes da entrada de estoque
             form = form.save()
             formset.save()
+
+            # Chama a função para atualizar o estoque dos 
+            # produtos com base nos dados do formulário
+            baixa_no_estoque(form)
+            
             url = 'estoque:detalhes_estoque_entrada'
             return HttpResponseRedirect(resolve_url(url, form.pk))
     else:
@@ -137,3 +144,34 @@ def add_estoque_entrada(request):
     
     # Renderiza o template com os formulários
     return render(request, template_name=nome_template, context=contexto)
+
+
+def baixa_no_estoque(form):
+    """
+    Atualiza o estoque dos produtos com base nas entradas 
+    fornecidas no form.
+
+    Esta função percorre todos os itens do estoque presentes
+    no formulário, atualiza a quantidade em estoque de cada 
+    produto correspondente e salva as alterações no banco de dados.
+
+    Args:
+        form: formulário de entrada de estoque
+        contendo os itens de estoque.
+    """
+
+    # Obtém todos os itens de estoque associados ao formulário
+    produtos = form.estoques.all()
+
+    # Itera sobre cada item do estoque
+    for item in produtos:
+
+        # Obtém o produto correspondente usando a chave primária
+        produto = Produto.objects.get(pk=item.produto.pk)
+
+        # Atualiza a quantidade em estoque do produto
+        produto.estoque = item.saldo
+
+        # Salva no Banco de dados
+        produto.save()
+    print('Estoque atualizado')

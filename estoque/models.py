@@ -77,6 +77,89 @@ class Estoque(TimeStampModel):
             kwargs={'pk':self.pk}
         )
 
+
+class EstoqueEntradaManager(models.Manager):
+    """
+    Manager personalizado para o modelo de entrada de estoque.
+    Este manager modifica o conjunto de consultas padrão para 
+    filtrar apenas entradas de estoque.
+    """
+    def get_queryset(self):
+        """
+        Retorna o conjunto de consultas filtrado para 
+        incluir apenas movimentos de entrada ('e').
+        """
+        return super(EstoqueEntradaManager, self).get_queryset().filter(
+            movimento='e'
+        )
+
+
+class EstoqueEntrada(Estoque):
+    """
+    Proxy model para o modelo Estoque, representando 
+    especificamente as entradas de estoque. Usa um manager 
+    personalizado para retornar apenas entradas de estoque.
+    """
+
+    objects = EstoqueEntradaManager()
+
+    class Meta:
+        """
+        Define este modelo como um proxy do modelo Estoque
+        Um proxy model no Django é uma maneira de criar um novo 
+        comportamento ou interface para um modelo existente, 
+        sem criar uma nova tabela no banco de dados. 
+        Em vez disso, ele reutiliza a tabela do modelo original, 
+        mas permite definir comportamentos diferentes, 
+        como métodos adicionais, propriedades, ou mesmo um 
+        novo manager com um conjunto de consultas personalizado.
+        """
+        proxy = True 
+        verbose_name = 'estoque entrada'
+        verbose_name_plural = 'estoque entrada'
+
+
+class EstoqueSaidaManager(models.Manager):
+    """
+    Manager personalizado para o modelo de saída de estoque.
+    Este manager modifica o conjunto de consultas padrão para 
+    filtrar apenas saídas de estoque.
+    """
+    def get_queryset(self):
+        """
+        Retorna o conjunto de consultas filtrado para 
+        incluir apenas movimentos de saída ('s').
+        """
+        return super(EstoqueSaidaManager, self).get_queryset().filter(
+            movimento='s'
+        )
+
+
+class EstoqueSaida(Estoque):
+    """
+    Proxy model para o modelo Estoque, representando 
+    especificamente as saídas de estoque. Usa um manager 
+    personalizado para retornar apenas saídas de estoque.
+    """
+
+    objects = EstoqueSaidaManager()
+
+    class Meta:
+        """
+        Define este modelo como um proxy do modelo Estoque
+        Um proxy model no Django é uma maneira de criar um novo 
+        comportamento ou interface para um modelo existente, 
+        sem criar uma nova tabela no banco de dados. 
+        Em vez disso, ele reutiliza a tabela do modelo original, 
+        mas permite definir comportamentos diferentes, 
+        como métodos adicionais, propriedades, ou mesmo um 
+        novo manager com um conjunto de consultas personalizado.
+        """
+        proxy = True
+        verbose_name = 'estoque saida'
+        verbose_name_plural = 'estoque saida'
+
+
 class EstoqueItens(models.Model):
     """
     Modelo que representa os itens de um registro de movimento 
