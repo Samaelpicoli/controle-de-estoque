@@ -8,6 +8,8 @@ from core.models import TimeStampModel
 
 from produto.models import Produto
 
+from .managers import EstoqueEntradaManager, EstoqueSaidaManager
+
 # Create your models here.
 
 # Define os tipos de movimento de estoque.
@@ -78,21 +80,6 @@ class Estoque(TimeStampModel):
         )
 
 
-class EstoqueEntradaManager(models.Manager):
-    """
-    Manager personalizado para o modelo de entrada de estoque.
-    Este manager modifica o conjunto de consultas padrão para 
-    filtrar apenas entradas de estoque.
-    """
-    def get_queryset(self):
-        """
-        Retorna o conjunto de consultas filtrado para 
-        incluir apenas movimentos de entrada ('e').
-        """
-        return super(EstoqueEntradaManager, self).get_queryset().filter(
-            movimento='e'
-        )
-
 
 class EstoqueEntrada(Estoque):
     """
@@ -106,6 +93,7 @@ class EstoqueEntrada(Estoque):
     class Meta:
         """
         Define este modelo como um proxy do modelo Estoque
+
         Um proxy model no Django é uma maneira de criar um novo 
         comportamento ou interface para um modelo existente, 
         sem criar uma nova tabela no banco de dados. 
@@ -118,21 +106,6 @@ class EstoqueEntrada(Estoque):
         verbose_name = 'estoque entrada'
         verbose_name_plural = 'estoque entrada'
 
-
-class EstoqueSaidaManager(models.Manager):
-    """
-    Manager personalizado para o modelo de saída de estoque.
-    Este manager modifica o conjunto de consultas padrão para 
-    filtrar apenas saídas de estoque.
-    """
-    def get_queryset(self):
-        """
-        Retorna o conjunto de consultas filtrado para 
-        incluir apenas movimentos de saída ('s').
-        """
-        return super(EstoqueSaidaManager, self).get_queryset().filter(
-            movimento='s'
-        )
 
 
 class EstoqueSaida(Estoque):
@@ -147,6 +120,7 @@ class EstoqueSaida(Estoque):
     class Meta:
         """
         Define este modelo como um proxy do modelo Estoque
+
         Um proxy model no Django é uma maneira de criar um novo 
         comportamento ou interface para um modelo existente, 
         sem criar uma nova tabela no banco de dados. 
