@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 
 from produto.models import Produto
 
-from .models import Estoque, EstoqueItens
+from .models import EstoqueEntrada, EstoqueSaida, EstoqueItens, Estoque
 
 from .forms import EstoqueForm, EstoqueItensForm
 
@@ -16,9 +16,9 @@ def lista_estoque_entrada(request):
     """
     View para listar as entradas de estoque.
 
-    Esta função busca todos os objetos do modelo Estoque onde o campo 
-    'movimento' é igual a 'e' (entrada) e renderiza o template 
-    'lista_estoque_entrada.html' com esses objetos.
+    Esta função consulta todas as instâncias de EstoqueEntrada 
+    e as passa para o template 'lista_estoque_entrada.html' 
+    para renderização.
 
     Args:
         request (HttpRequest): O objeto de solicitação HTTP.
@@ -30,7 +30,7 @@ def lista_estoque_entrada(request):
     nome_template = 'lista_estoque_entrada.html'
     
     # Filtra os objetos do modelo Estoque onde movimento é 'e entrada'
-    objetos = Estoque.objects.filter(movimento='e')
+    objetos = EstoqueEntrada.objects.all()
     
     # Contexto a ser passado para o template
     contexto = {'objetos': objetos}
@@ -60,7 +60,7 @@ def detalhes_estoque_entrada(request, pk):
     nome_template = 'detalhes_estoque_entrada.html'
 
     # Busca o objeto Estoque usando a chave primária (pk) fornecida
-    obj = Estoque.objects.get(pk=pk)
+    obj = EstoqueEntrada.objects.get(pk=pk)
 
     # Contexto a ser passado para o template
     contexto = {'objeto': obj}
@@ -70,7 +70,6 @@ def detalhes_estoque_entrada(request, pk):
 
 
 def add_estoque_entrada(request):
-
     """
     View para adicionar uma nova entrada de estoque.
 
@@ -96,7 +95,7 @@ def add_estoque_entrada(request):
 
     # Define um formset para EstoqueItens relacionado ao Estoque
     item_estoque_formset = inlineformset_factory(
-        Estoque,
+        EstoqueEntrada,
         EstoqueItens,
         form = EstoqueItensForm,
         extra = 0,
@@ -128,7 +127,7 @@ def add_estoque_entrada(request):
             # Chama a função para atualizar o estoque dos 
             # produtos com base nos dados do formulário
             baixa_no_estoque(form)
-            
+
             url = 'estoque:detalhes_estoque_entrada'
             return HttpResponseRedirect(resolve_url(url, form.pk))
     else:
@@ -175,3 +174,60 @@ def baixa_no_estoque(form):
         # Salva no Banco de dados
         produto.save()
     print('Estoque atualizado')
+
+
+def lista_estoque_saida(request):
+    """
+    View para listar as saídas de estoque.
+
+    Esta função consulta todas as instâncias de EstoqueSaida 
+    e as passa para o template 'lista_estoque_saida.html' 
+    para renderização.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação HTTP.
+
+    Returns:
+        HttpResponse: A resposta HTTP com o template renderizado.
+    """
+    # Nome do template a ser renderizado
+    nome_template = 'lista_estoque_saida.html'
+    
+    # Consulta todas as instâncias de EstoqueSaida
+    objetos = EstoqueSaida.objects.all()
+    
+    # Contexto a ser passado para o template
+    contexto = {'objetos': objetos}
+    
+    # Renderiza o template com o contexto
+    return render(request, template_name=nome_template, context=contexto)
+
+
+def detalhes_estoque_saida(request, pk):
+
+    """
+    View para exibir os detalhes de uma saída de estoque específica.
+
+    Esta função busca um objeto do modelo Estoque usando a 
+    chave primária (pk) fornecida e renderiza o template 
+    'detalhes_estoque_saida.html' com esse objeto no contexto.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação HTTP.
+        pk (int): A chave primária do objeto Estoque a ser detalhado.
+
+    Returns:
+        HttpResponse: A resposta HTTP com o template renderizado.
+    """
+
+    # Nome do template a ser renderizado
+    nome_template = 'detalhes_estoque_saida.html'
+
+    # Busca o objeto Estoque usando a chave primária (pk) fornecida
+    obj = EstoqueSaida.objects.get(pk=pk)
+
+    # Contexto a ser passado para o template
+    contexto = {'objeto': obj}
+
+    # Renderiza o template com o contexto
+    return render(request, template_name=nome_template, context=contexto)

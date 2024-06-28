@@ -1,0 +1,53 @@
+<!-- Este template exibe uma lista de saídas de estoque.
+    
+Extende de "base.html" e utiliza o bloco "conteudo" para inserir 
+conteúdo específico da página.
+Inclui um título "Estoque Saída" e um botão para adicionar novas saídas de estoque.
+Se houver objetos na lista de saídas de estoque, exibe-os em uma tabela com colunas 
+para Item, NF, Data e Funcionário.
+Se não houver objetos, exibe uma mensagem de aviso. -->
+
+
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<h2>Estoque Saída
+    <span class="pull-right">
+        <!-- Direciona para a rota de adicionar uma nova saída -->
+            <button type="button" class="btn btn-primary">
+                <span class="fa fa-plus"></span>
+                Adicionar
+            </button>
+        </a>
+    </span>
+</h2>
+
+{% if objetos %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>NF</th>
+                <th>Data</th>
+                <th>Funcionário</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for objeto in objetos %}
+                <tr>
+                    <td>
+                        <a href="{{ objeto.get_absolute_url }}">{{ objeto }}</a>
+                    </td>
+                    <td>{{ objeto.nf_formato }}</td>
+                    <td>{{ objeto.criado_em }}</td>
+                    <td>{{ objeto.funcionario.first_name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="alert alert-warning">Sem itens na lista</p>
+{% endif %}
+
+{% endblock conteudo %}

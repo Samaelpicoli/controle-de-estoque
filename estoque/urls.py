@@ -16,5 +16,13 @@ urlpatterns = [
     ),
     # URL para a view que adiciona uma nova entrada no estoque.
     path('adicionar/', views.add_estoque_entrada, name='add_estoque_entrada'), 
+    # URL para a view que lista todas as saídas do estoque.
+    path('saida/', views.lista_estoque_saida, name='lista_estoque_saida'),
+     # URL para a view que lista os detalhes das saídas no estoque.
+    path(
+        'saida/<int:pk>/detalhes', 
+        views.detalhes_estoque_saida, 
+        name='detalhes_estoque_saida'
+    ),
     
 ]
