@@ -12,6 +12,80 @@ from .forms import EstoqueForm, EstoqueItensForm
 
 # Create your views here.
 
+def add_estoque(request, template_name, movimento, url):
+    """
+    Adiciona uma nova entrada ou saída de estoque.
+
+    Esta função cria um novo formulário e um formset para itens 
+    de estoque. Se a requisição for POST, ela valida e 
+    salva os formulários, atualiza o estoque dos produtos e 
+    redireciona para a página de detalhes do estoque.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação HTTP.
+        template_name (str): O nome do template a ser renderizado.
+        movimento (str): O tipo de movimento de estoque 
+        ('e' para entrada, 's' para saída).
+        url (str): A URL para redirecionamento após salvar 
+        os formulários.
+
+    Returns:
+        dict: Contexto contendo os formulários e formset, ou 
+        redireciona para a página de detalhes do estoque.
+    """
+    # Instancia um novo objeto Estoque
+    estoque_form = Estoque()
+
+     # Define um formset para EstoqueItens relacionado ao Estoque
+    item_estoque_formset = inlineformset_factory(
+        Estoque,
+        EstoqueItens,
+        form = EstoqueItensForm,
+        extra = 0,
+        min_num = 1,
+        validate_min = True,
+    )
+
+    if request.method == 'POST':
+        # Se a requisição for POST, cria os formulários 
+        # com os dados enviados
+        form = EstoqueForm(
+            request.POST, 
+            instance=estoque_form, 
+            prefix='main'
+        )
+        formset = item_estoque_formset(
+            request.POST,
+            instance = estoque_form,
+            prefix = 'estoque'
+        )
+
+        # Verifica se os formulários são válidos
+        if form.is_valid() and formset.is_valid():
+            # Salva os formulário
+            form = form.save()
+            # Define o tipo de movimento de estoque (entrada ou saída)
+            form.movimento = movimento
+            form.save()
+            # Salva o formset de itens de estoque
+            formset.save()
+
+            # Chama a função para atualizar o estoque dos 
+            # produtos com base nos dados do formulário
+            baixa_no_estoque(form)
+            return {'pk': form.pk}
+    else:
+        # Se a requisição não for POST, cria formulários vazios
+        form = EstoqueForm(instance=estoque_form, prefix='main')
+        formset = item_estoque_formset(
+            instance=estoque_form, 
+            prefix='estoque'
+        )
+    # Cria o contexto a ser passado para o template
+    contexto = {'form': form, 'formset': formset}
+    return contexto
+
+
 def lista_estoque_entrada(request):
     """
     View para listar as entradas de estoque.
@@ -71,77 +145,38 @@ def detalhes_estoque_entrada(request, pk):
 
 def add_estoque_entrada(request):
     """
-    View para adicionar uma nova entrada de estoque.
+    Adiciona uma nova entrada de estoque.
 
-    Exibe um formulário para a criação de uma nova entrada de estoque
-    e um formset para adicionar os itens do estoque. 
-    Se o método da requisição for POST, valida e salva os dados do 
-    formulário e do formset, redirecionando para a página de detalhes
-    da entrada de estoque.
+    Esta função utiliza a função add_estoque para criar e validar os
+    formulários de entrada de estoque. Se os formulários forem válidos
+    e os dados forem salvos, redireciona para a página de detalhes da 
+    entrada de estoque.
 
     Args:
-        request (HttpRequest): Objeto HttpRequest que contém os 
-        dados da requisição.
+    request (HttpRequest): O objeto de solicitação HTTP.
 
     Returns:
-        HttpResponse: Renderiza o template com o formulário e o formset
-        ou redireciona para a página de detalhes da entrada de estoque.
+        HttpResponse: Redireciona para a página de detalhes da entrada de
+        estoque se os dados forem salvos, caso contrário, renderiza o 
+        template com os formulários.
     """
 
     nome_template = 'form_estoque_entrada.html'
     
-    # Instancia um novo objeto Estoque
-    estoque_form = Estoque()
+    # Define o tipo de movimento como 'entrada'
+    movimento = 'e'
 
-    # Define um formset para EstoqueItens relacionado ao Estoque
-    item_estoque_formset = inlineformset_factory(
-        EstoqueEntrada,
-        EstoqueItens,
-        form = EstoqueItensForm,
-        extra = 0,
-        min_num = 1,
-        validate_min = True,
-    )
-
-    if request.method == 'POST':
-        # Se a requisição for POST, cria os formulários 
-        # com os dados enviados
-        form = EstoqueForm(
-            request.POST, 
-            instance=estoque_form, 
-            prefix='main'
-        )
-        formset = item_estoque_formset(
-            request.POST,
-            instance = estoque_form,
-            prefix = 'estoque'
-        )
-
-        # Verifica se os formulários são válidos
-        if form.is_valid() and formset.is_valid():
-            # Salva os formulários e redireciona 
-            # para a página de detalhes da entrada de estoque
-            form = form.save()
-            form.movimento = 'e'
-            form.save()
-            formset.save()
-
-            # Chama a função para atualizar o estoque dos 
-            # produtos com base nos dados do formulário
-            baixa_no_estoque(form)
-
-            url = 'estoque:detalhes_estoque_entrada'
-            return HttpResponseRedirect(resolve_url(url, form.pk))
-    else:
-        # Se a requisição não for POST, cria formulários vazios
-        form = EstoqueForm(instance=estoque_form, prefix='main')
-        formset = item_estoque_formset(
-            instance=estoque_form, 
-            prefix='estoque'
-        )
+    # URL de redirecionamento após salvar os dados
+    url = 'estoque:detalhes_estoque_entrada'
 
     # Contexto passado para o template
-    contexto = {'form': form, 'formset': formset}
+    contexto = add_estoque(request, nome_template, movimento, url)
+
+     # Verifica se a chave 'pk' está presente no contexto 
+     # (indicando que os dados foram salvos)
+    if contexto.get('pk'):
+        # Redireciona para a página de detalhes da entrada de estoque
+        return HttpResponseRedirect(resolve_url(url, contexto.get('pk')))
     
     # Renderiza o template com os formulários
     return render(request, template_name=nome_template, context=contexto)
@@ -237,77 +272,38 @@ def detalhes_estoque_saida(request, pk):
 
 def add_estoque_saida(request):
     """
-    View para adicionar uma nova saida de estoque.
+    Adiciona uma nova saída de estoque.
 
-    Exibe um formulário para a criação de uma nova saida de estoque
-    e um formset para adicionar os itens do estoque. 
-    Se o método da requisição for POST, valida e salva os dados do 
-    formulário e do formset, redirecionando para a página de detalhes
-    da saida de estoque.
+    Esta função utiliza a função add_estoque para criar e validar os
+    formulários de saída de estoque. Se os formulários forem válidos
+    e os dados forem salvos, redireciona para a página de detalhes da 
+    saída de estoque.
 
     Args:
-        request (HttpRequest): Objeto HttpRequest que contém os 
-        dados da requisição.
+    request (HttpRequest): O objeto de solicitação HTTP.
 
     Returns:
-        HttpResponse: Renderiza o template com o formulário e o formset
-        ou redireciona para a página de detalhes da saida de estoque.
+        HttpResponse: Redireciona para a página de detalhes da saída de
+        estoque se os dados forem salvos, caso contrário, renderiza o 
+        template com os formulários.
     """
-
+    
     nome_template = 'form_estoque_saida.html'
     
-    # Instancia um novo objeto Estoque
-    estoque_form = Estoque()
+    # Define o tipo de movimento como saída
+    movimento = 's'
 
-    # Define um formset para EstoqueItens relacionado ao Estoque
-    item_estoque_formset = inlineformset_factory(
-        EstoqueSaida,
-        EstoqueItens,
-        form = EstoqueItensForm,
-        extra = 0,
-        min_num = 1,
-        validate_min = True,
-    )
-
-    if request.method == 'POST':
-        # Se a requisição for POST, cria os formulários 
-        # com os dados enviados
-        form = EstoqueForm(
-            request.POST, 
-            instance=estoque_form, 
-            prefix='main'
-        )
-        formset = item_estoque_formset(
-            request.POST,
-            instance = estoque_form,
-            prefix = 'estoque'
-        )
-
-        # Verifica se os formulários são válidos
-        if form.is_valid() and formset.is_valid():
-            # Salva os formulários e redireciona 
-            # para a página de detalhes da entrada de estoque
-            form = form.save()
-            form.movimento = 's'
-            form.save()
-            formset.save()
-
-            # Chama a função para atualizar o estoque dos 
-            # produtos com base nos dados do formulário
-            baixa_no_estoque(form)
-
-            url = 'estoque:detalhes_estoque_saida'
-            return HttpResponseRedirect(resolve_url(url, form.pk))
-    else:
-        # Se a requisição não for POST, cria formulários vazios
-        form = EstoqueForm(instance=estoque_form, prefix='main')
-        formset = item_estoque_formset(
-            instance=estoque_form, 
-            prefix='estoque'
-        )
+    # URL de redirecionamento após salvar os dados
+    url = 'estoque:detalhes_estoque_saida'
 
     # Contexto passado para o template
-    contexto = {'form': form, 'formset': formset}
+    contexto = add_estoque(request, nome_template, movimento, url)
+
+    # Verifica se a chave 'pk' está presente no contexto 
+    # (indicando que os dados foram salvos)
+    if contexto.get('pk'):
+        # Redireciona para a página de detalhes da saída de estoque
+        return HttpResponseRedirect(resolve_url(url, contexto.get('pk')))
     
     # Renderiza o template com os formulários
     return render(request, template_name=nome_template, context=contexto)
