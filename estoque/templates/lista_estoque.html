@@ -1,9 +1,10 @@
-<!-- Este template exibe uma lista de entradas de estoque.
+<!-- Este template exibe uma lista de entradas ou saídas de estoque.
     
 Extende de "base.html" e utiliza o bloco "conteudo" para inserir 
 conteúdo específico da página.
-Inclui um título "Estoque Entrada" e um botão para adicionar novas entradas de estoque.
-Se houver objetos na lista de entradas de estoque, exibe-os em uma tabela com colunas 
+Inclui um título que virá da rota se será entrada ou saída e um botão para 
+adicionar novas entradas ou saídas de estoque.
+Se houver objetos na lista de entradas ou saídas de estoque, exibe-os em uma tabela com colunas 
 para Item, NF, Data e Funcionário.
 Se não houver objetos, exibe uma mensagem de aviso. -->
 
@@ -12,10 +13,11 @@ Se não houver objetos, exibe uma mensagem de aviso. -->
 
 {% block conteudo %}
 
-<h2>Estoque Entrada
+<!-- Captura o retorno da view para definir se irá mostrar a lista de entrada ou saída -->
+<h2>Estoque {{ titulo }}
     <span class="pull-right">
-        <!-- Direciona para a rota de adicionar uma nova entrada -->
-        <a href="{% url 'estoque:add_estoque_entrada' %}">
+        <!-- Direciona para a rota de adicionar uma nova entrada/saída -->
+        <a href="{% url url_add %}">
             <button type="button" class="btn btn-primary">
                 <span class="fa fa-plus"></span>
                 Adicionar

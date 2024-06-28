@@ -101,13 +101,17 @@ def lista_estoque_entrada(request):
         HttpResponse: A resposta HTTP com o template renderizado.
     """
     # Nome do template a ser renderizado
-    nome_template = 'lista_estoque_entrada.html'
+    nome_template = 'lista_estoque.html'
     
     # Filtra os objetos do modelo Estoque onde movimento é 'e entrada'
     objetos = EstoqueEntrada.objects.all()
     
     # Contexto a ser passado para o template
-    contexto = {'objetos': objetos}
+    contexto = {
+        'objetos': objetos, 
+        'titulo': 'Entrada',
+        'url_add': 'estoque:add_estoque_entrada'
+    }
     
     # Renderiza o template com o contexto
     return render(request, template_name=nome_template, context=contexto)
@@ -228,13 +232,17 @@ def lista_estoque_saida(request):
         HttpResponse: A resposta HTTP com o template renderizado.
     """
     # Nome do template a ser renderizado
-    nome_template = 'lista_estoque_saida.html'
+    nome_template = 'lista_estoque.html'
     
     # Consulta todas as instâncias de EstoqueSaida
     objetos = EstoqueSaida.objects.all()
     
     # Contexto a ser passado para o template
-    contexto = {'objetos': objetos}
+    contexto = {
+        'objetos': objetos, 
+        'titulo': 'Entrada',
+        'url_add': 'estoque:add_estoque_saida'
+    }
     
     # Renderiza o template com o contexto
     return render(request, template_name=nome_template, context=contexto)
