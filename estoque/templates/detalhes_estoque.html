@@ -1,11 +1,11 @@
 
-<!-- Este template exibe os detalhes de uma saída específica de estoque.
+<!-- Este template exibe os detalhes de uma entrada ou saída específica de estoque.
 
 Extende de "base.html" e utiliza o bloco "conteudo" para inserir 
 conteúdo específico da página.
 
-Inclui um link para voltar à lista de saídas de estoque.
-Exibe informações detalhadas da saída de estoque, 
+Inclui um link para voltar à lista de entradas ou saídas de estoque.
+Exibe informações detalhadas da entrada ou saída de estoque, 
 incluindo Nota Fiscal, Data e Funcionário.
 
 Também exibe uma tabela com os produtos relacionados a esta saída 
@@ -17,10 +17,10 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
 {% block conteudo %}
 
 
-<!-- Link para voltar à lista de entradas de saída -->
-<a href="{% url 'estoque:lista_estoque_saida' %}">Voltar</a>
+<!-- Link para voltar à lista de entradas ou saídas do estoque que recebe a partir do context da view -->
+<a href="{% url url_lista %}">Voltar</a>
 
-<!-- Título da página, utilizando o nome do objeto (saída de estoque) -->
+<!-- Título da página, utilizando o nome do objeto (entrada/saída de estoque) -->
 <h1>{{ objeto }}</h1>
 
 <div class="col-sm-6">
@@ -33,12 +33,12 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
             </tr>
             <tr>
                 <th class="text-right">Data</th>
-                <!-- Exibe a data de criação da saída de estoque -->
+                <!-- Exibe a data de criação da entrada/saída de estoque -->
                 <td>{{ objeto.criado_em }}</td>
             </tr>
             <tr>
                 <th class="text-right">Funcionário</th>
-                <!-- Exibe o nome do funcionário responsável pela saída de estoque -->
+                <!-- Exibe o nome do funcionário responsável pela entrada/saída de estoque -->
                 <td>{{ objeto.funcionario.first_name }}</td>
             </tr>
         </tbody>
@@ -46,7 +46,7 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
 </div>
 
 <table class="table table-striped">
-    <!-- Cabeçalhos da tabela de produtos relacionados à saída de estoque -->
+    <!-- Cabeçalhos da tabela de produtos relacionados à entrada/saída de estoque -->
     <thead>
         <tr>
             <th>Produto</th>
@@ -55,14 +55,14 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
         </tr>
     </thead>
     <tbody>
-        <!-- Itera sobre todos os produtos relacionados à saída de estoque -->
+        <!-- Itera sobre todos os produtos relacionados à entrada/saída de estoque -->
         {% for obj in objeto.estoques.all %}
             <tr>
                 <!-- {# Exibe o nome do produto #} -->
                 <td>{{ obj.produto }}</td>
-                <!-- {# Exibe a quantidade do produto na saída de estoque #} -->
+                <!-- {# Exibe a quantidade do produto na entrada/saída de estoque #} -->
                 <td>{{ obj.quantidade }}</td>
-                <!-- {# Exibe o saldo do produto após a saída de estoque #} -->
+                <!-- {# Exibe o saldo do produto após a entrada/saída de estoque #} -->
                 <td>{{ obj.saldo }}</td>
             </tr>
         {% endfor %}

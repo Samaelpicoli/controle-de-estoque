@@ -135,13 +135,16 @@ def detalhes_estoque_entrada(request, pk):
     """
 
     # Nome do template a ser renderizado
-    nome_template = 'detalhes_estoque_entrada.html'
+    nome_template = 'detalhes_estoque.html'
 
     # Busca o objeto Estoque usando a chave primária (pk) fornecida
     obj = EstoqueEntrada.objects.get(pk=pk)
 
     # Contexto a ser passado para o template
-    contexto = {'objeto': obj}
+    contexto = {
+        'objeto': obj,
+        'url_lista': 'estoque:lista_estoque_entrada'
+    }
 
     # Renderiza o template com o contexto
     return render(request, template_name=nome_template, context=contexto)
@@ -266,13 +269,16 @@ def detalhes_estoque_saida(request, pk):
     """
 
     # Nome do template a ser renderizado
-    nome_template = 'detalhes_estoque_saida.html'
+    nome_template = 'detalhes_estoque.html'
 
     # Busca o objeto Estoque usando a chave primária (pk) fornecida
     obj = EstoqueSaida.objects.get(pk=pk)
 
     # Contexto a ser passado para o template
-    contexto = {'objeto': obj}
+    contexto = {
+        'objeto': obj,
+        'url_lista': 'estoque:lista_estoque_entrada'
+    }
 
     # Renderiza o template com o contexto
     return render(request, template_name=nome_template, context=contexto)
