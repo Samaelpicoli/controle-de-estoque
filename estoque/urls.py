@@ -24,5 +24,7 @@ urlpatterns = [
         views.detalhes_estoque_saida, 
         name='detalhes_estoque_saida'
     ),
-    
+    # URL para a view que adiciona uma nova saída no estoque.
+    path('saida/add/', views.add_estoque_saida, name='add_estoque_saida'),
+
 ]
