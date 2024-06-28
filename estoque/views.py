@@ -122,6 +122,8 @@ def add_estoque_entrada(request):
             # Salva os formulários e redireciona 
             # para a página de detalhes da entrada de estoque
             form = form.save()
+            form.movimento = 'e'
+            form.save()
             formset.save()
 
             # Chama a função para atualizar o estoque dos 
@@ -286,6 +288,8 @@ def add_estoque_saida(request):
             # Salva os formulários e redireciona 
             # para a página de detalhes da entrada de estoque
             form = form.save()
+            form.movimento = 's'
+            form.save()
             formset.save()
 
             # Chama a função para atualizar o estoque dos 

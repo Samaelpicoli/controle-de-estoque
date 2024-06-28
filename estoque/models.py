@@ -32,7 +32,7 @@ class Estoque(TimeStampModel):
     """
     funcionario = models.ForeignKey(User, on_delete=models.CASCADE)
     nf = models.PositiveIntegerField('Nota Fiscal', null=True, blank=True)
-    movimento = models.CharField(max_length=1, choices=MOVIMENTO)
+    movimento = models.CharField(max_length=1, choices=MOVIMENTO, blank=True)
 
     class Meta:
         """
@@ -50,9 +50,9 @@ class Estoque(TimeStampModel):
         Retorna a representação em string do registro de estoque.
 
         Returns:
-            str: O ID do registro de estoque.
+            str: O ID do registro de estoque e a data de criação.
         """
-        return f'{self.pk}'
+        return f'{self.pk} - {self.criado_em.strftime("%d-%m-%Y")}'
     
 
     def nf_formato(self):
@@ -61,9 +61,12 @@ class Estoque(TimeStampModel):
         ter a quantia de caracteres necessárias.
 
         Returns:
-            str: a nota fiscal formatada.
+            str: a nota fiscal formatada caso tiver.
+            str: --- se não conter nota fiscal.
         """
-        return str(self.nf).zfill(3)
+        if self.nf:
+            return str(self.nf).zfill(3)
+        return '---'
     
 
 
