@@ -1,5 +1,4 @@
 <!-- Este template exibe uma lista de entradas ou saídas de estoque.
-    
 Extende de "base.html" e utiliza o bloco "conteudo" para inserir 
 conteúdo específico da página.
 Inclui um título que virá da rota se será entrada ou saída e um botão para 
@@ -7,7 +6,6 @@ adicionar novas entradas ou saídas de estoque.
 Se houver objetos na lista de entradas ou saídas de estoque, exibe-os em uma tabela com colunas 
 para Item, NF, Data e Funcionário.
 Se não houver objetos, exibe uma mensagem de aviso. -->
-
 
 {% extends "base.html" %}
 
@@ -26,7 +24,7 @@ Se não houver objetos, exibe uma mensagem de aviso. -->
     </span>
 </h2>
 
-{% if objetos %}
+{% if object_list %}
     <table class="table table-striped">
         <thead>
             <tr>
@@ -37,7 +35,7 @@ Se não houver objetos, exibe uma mensagem de aviso. -->
             </tr>
         </thead>
         <tbody>
-            {% for objeto in objetos %}
+            {% for objeto in object_list %}
                 <tr>
                     <td>
                         <a href="{{ objeto.get_absolute_url }}">{{ objeto }}</a>

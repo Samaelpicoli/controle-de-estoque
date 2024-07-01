@@ -87,27 +87,6 @@ def add_estoque(request, template_name, movimento, url):
     contexto = {'form': form, 'formset': formset}
     return contexto
 
-
-class ListaEstoqueEntrada(ListView):
-    """
-    Classe-based view para listar as entradas de estoque.
-    """
-    model = EstoqueEntrada
-    template_name = 'lista_estoque.html'
-
-    def get_context_data(self, **kwargs):
-        """
-        Adiciona dados adicionais ao contexto do template.
-
-        Returns:
-            dict: Contexto atualizado com título e URL 
-            para adicionar entrada de estoque.
-        """
-        context = super(ListaEstoqueEntrada, self).get_context_data(**kwargs)
-        context['titulo'] = 'Entrada'
-        context['url_add'] = 'estoque:add_estoque_entrada'
-        return context
-
 def lista_estoque_entrada(request):
     """
     View para listar as entradas de estoque.
@@ -273,32 +252,6 @@ def lista_estoque_saida(request):
     return render(request, template_name=nome_template, context=contexto)
 
 
-class ListaEstoqueSaida(ListView):
-    """
-    Classe-based view para listar as saídas de estoque.
-    """
-    # Define o modelo a ser usado para listar os objetos
-    model = EstoqueSaida
-
-    # Define o template a ser renderizado
-    template_name = 'lista_estoque.html'  
-
-    def get_context_data(self, **kwargs):
-        """
-        Adiciona dados adicionais ao contexto do template.
-
-        Returns:
-            dict: Contexto atualizado com título e URL para adicionar
-            saída de estoque.
-        """
-        # Chama o método get_context_data da superclasse 
-        # para obter o contexto padrão
-        context = super(ListaEstoqueSaida, self).get_context_data(**kwargs)
-        context['titulo'] = 'Saída'
-        context['url_add'] = 'estoque:add_estoque_saida'
-        return context
-
-
 def detalhes_estoque_saida(request, pk):
 
     """
@@ -370,3 +323,51 @@ def add_estoque_saida(request):
     # Renderiza o template com os formulários
     return render(request, template_name=nome_template, context=contexto)
 
+
+class ListaEstoqueEntrada(ListView):
+    """
+    Classe-based view para listar as entradas de estoque.
+    """
+    model = EstoqueEntrada
+    template_name = 'lista_estoque.html'
+    context_object_name = 'object_list'
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona dados adicionais ao contexto do template.
+
+        Returns:
+            dict: Contexto atualizado com título e URL 
+            para adicionar entrada de estoque.
+        """
+        context = super(ListaEstoqueEntrada, self).get_context_data(**kwargs)
+        context['titulo'] = 'Entrada'
+        context['url_add'] = 'estoque:add_estoque_entrada'
+        print(context['object_list'])  # Adicione este print
+        return context
+    
+
+class ListaEstoqueSaida(ListView):
+    """
+    Classe-based view para listar as saídas de estoque.
+    """
+    # Define o modelo a ser usado para listar os objetos
+    model = EstoqueSaida
+
+    # Define o template a ser renderizado
+    template_name = 'lista_estoque.html'  
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona dados adicionais ao contexto do template.
+
+        Returns:
+            dict: Contexto atualizado com título e URL para adicionar
+            saída de estoque.
+        """
+        # Chama o método get_context_data da superclasse 
+        # para obter o contexto padrão
+        context = super(ListaEstoqueSaida, self).get_context_data(**kwargs)
+        context['titulo'] = 'Saída'
+        context['url_add'] = 'estoque:add_estoque_saida'
+        return context
