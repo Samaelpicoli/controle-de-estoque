@@ -411,3 +411,5 @@ class DetalheEstoqueSaida(DetailView):
         context = super(DetalheEstoqueSaida, self).get_context_data(**kwargs)
         context['url_list'] = 'estoque:lista_estoque_saida'
         return context   
+    
+
