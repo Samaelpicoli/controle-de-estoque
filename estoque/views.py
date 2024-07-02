@@ -1,4 +1,5 @@
-from typing import Any
+from django.contrib.auth.decorators import login_required
+
 from django.shortcuts import render, resolve_url
 
 from django.forms import inlineformset_factory
@@ -152,6 +153,7 @@ def detalhes_estoque_entrada(request, pk):
     return render(request, template_name=nome_template, context=contexto)
 
 
+@login_required
 def add_estoque_entrada(request):
     """
     Adiciona uma nova entrada de estoque.
@@ -286,6 +288,7 @@ def detalhes_estoque_saida(request, pk):
     return render(request, template_name=nome_template, context=contexto)
 
 
+@login_required
 def add_estoque_saida(request):
     """
     Adiciona uma nova saída de estoque.
