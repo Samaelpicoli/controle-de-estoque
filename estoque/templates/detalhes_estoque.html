@@ -18,10 +18,10 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
 
 
 <!-- Link para voltar à lista de entradas ou saídas do estoque que recebe a partir do context da view -->
-<a href="{% url url_lista %}">Voltar</a>
+<a href="{% url url_list %}">Voltar</a>
 
 <!-- Título da página, utilizando o nome do objeto (entrada/saída de estoque) -->
-<h1>{{ objeto }}</h1>
+<h1>{{ object }}</h1>
 
 <div class="col-sm-6">
     <table class="table table-user-information">
@@ -29,17 +29,17 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
             <tr>
                 <th class="text-right">Nota Fiscal</th>
                 <!-- Exibe o número da Nota Fiscal formatada -->
-                <td>{{ objeto.nf_formato }} </td>
+                <td>{{ object.nf_formato }} </td>
             </tr>
             <tr>
                 <th class="text-right">Data</th>
                 <!-- Exibe a data de criação da entrada/saída de estoque -->
-                <td>{{ objeto.criado_em }}</td>
+                <td>{{ object.criado_em }}</td>
             </tr>
             <tr>
                 <th class="text-right">Funcionário</th>
                 <!-- Exibe o nome do funcionário responsável pela entrada/saída de estoque -->
-                <td>{{ objeto.funcionario.first_name }}</td>
+                <td>{{ object.funcionario.first_name }}</td>
             </tr>
         </tbody>
     </table>
@@ -56,7 +56,7 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
     </thead>
     <tbody>
         <!-- Itera sobre todos os produtos relacionados à entrada/saída de estoque -->
-        {% for obj in objeto.estoques.all %}
+        {% for obj in object.estoques.all %}
             <tr>
                 <!-- {# Exibe o nome do produto #} -->
                 <td>{{ obj.produto }}</td>

@@ -1,10 +1,11 @@
+from typing import Any
 from django.shortcuts import render, resolve_url
 
 from django.forms import inlineformset_factory
 
 from django.http import HttpResponseRedirect
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from produto.models import Produto
 
@@ -371,3 +372,43 @@ class ListaEstoqueSaida(ListView):
         context['titulo'] = 'Saída'
         context['url_add'] = 'estoque:add_estoque_saida'
         return context
+    
+
+class DetalheEstoqueEntrada(DetailView):
+    """
+    Classe-based view para exibir os detalhes de uma entrada no estoque.
+    """
+    model = EstoqueEntrada
+    template_name = 'detalhes_estoque.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona dados adicionais ao contexto do template.
+
+        Returns:
+            dict: Contexto atualizado com a URL da lista 
+            de entradas de estoque.
+        """
+        context = super(DetalheEstoqueEntrada, self).get_context_data(**kwargs)
+        context['url_list'] = 'estoque:lista_estoque_entrada'
+        return context
+
+
+class DetalheEstoqueSaida(DetailView):
+    """
+    Classe-based view para exibir os detalhes de uma saída no estoque.
+    """
+    model = EstoqueSaida
+    template_name = 'detalhes_estoque.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Adiciona dados adicionais ao contexto do template.
+
+        Returns:
+            dict: Contexto atualizado com a URL da lista 
+            de saídas de estoque.
+        """
+        context = super(DetalheEstoqueSaida, self).get_context_data(**kwargs)
+        context['url_list'] = 'estoque:lista_estoque_saida'
+        return context   
