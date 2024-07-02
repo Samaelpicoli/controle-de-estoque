@@ -344,7 +344,6 @@ class ListaEstoqueEntrada(ListView):
         context = super(ListaEstoqueEntrada, self).get_context_data(**kwargs)
         context['titulo'] = 'Entrada'
         context['url_add'] = 'estoque:add_estoque_entrada'
-        print(context['object_list'])  # Adicione este print
         return context
     
 
