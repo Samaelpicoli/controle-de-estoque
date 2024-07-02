@@ -38,7 +38,7 @@ Se não houver objetos, exibe uma mensagem de aviso. -->
             {% for objeto in object_list %}
                 <tr>
                     <td>
-                        <a href="{{ objeto.get_absolute_url }}">{{ objeto }}</a>
+                        <a href="{% url 'estoque:detalhes_estoque' objeto.pk %}">{{ objeto }}</a>
                     </td>
                     <td>{{ objeto.nf_formato }}</td>
                     <td>{{ objeto.criado_em }}</td>

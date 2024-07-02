@@ -18,7 +18,11 @@ de estoque, mostrando a quantidade e o saldo de cada produto. -->
 
 
 <!-- Link para voltar à lista de entradas ou saídas do estoque que recebe a partir do context da view -->
-<a href="{% url url_list %}">Voltar</a>
+{% if object.movimento == 'e' %}
+    <a href="{% url 'estoque:lista_estoque_entrada' %}">Voltar</a>
+{% else %}
+    <a href="{% url 'estoque:lista_estoque_saida' %}">Voltar</a>
+{% endif %}
 
 <!-- Título da página, utilizando o nome do objeto (entrada/saída de estoque) -->
 <h1>{{ object }}</h1>

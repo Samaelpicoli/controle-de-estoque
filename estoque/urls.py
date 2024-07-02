@@ -16,8 +16,8 @@ urlpatterns = [
     # URL para a view que lista os detalhes das entradas no estoque.
     path(
         '<int:pk>/detalhes/', 
-        views.DetalheEstoqueEntrada.as_view(), 
-        name='detalhes_estoque_entrada'
+        views.DetalheEstoque.as_view(), 
+        name='detalhes_estoque'
     ),
 
     # URL para a view que adiciona uma nova entrada no estoque.
@@ -30,13 +30,6 @@ urlpatterns = [
         name='lista_estoque_saida'
     ),
 
-     # URL para a view que lista os detalhes das saídas no estoque.
-    path(
-        'saida/<int:pk>/detalhes', 
-        views.DetalheEstoqueSaida.as_view(), 
-        name='detalhes_estoque_saida'
-    ),
-    
     # URL para a view que adiciona uma nova saída no estoque.
     path('saida/add/', views.add_estoque_saida, name='add_estoque_saida'),
 
