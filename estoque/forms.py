@@ -13,9 +13,9 @@ class EstoqueForm(forms.ModelForm):
 
     class Meta:
         model = Estoque
-        # Inclui os campos funcionario e nf do modelo Estoque 
+        # Inclui os campo de nf do modelo Estoque 
         # no formulário
-        fields = ('funcionario', 'nf')
+        fields = ('nf',)
 
 
 class EstoqueItensForm(forms.ModelForm):

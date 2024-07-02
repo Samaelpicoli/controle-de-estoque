@@ -24,13 +24,13 @@ class Estoque(TimeStampModel):
 
     Attributes:
         funcionario (ForeignKey): Referência para o usuário 
-        (funcionário) que realizou o movimento de estoque.
+        (funcionário) que realizou o movimento de estoque. Opcional.
         nf (PositiveIntegerField): Número da Nota Fiscal, 
         opcional.
         movimento (CharField): Tipo de movimento de estoque 
         ('e' para entrada, 's' para saída).
     """
-    funcionario = models.ForeignKey(User, on_delete=models.CASCADE)
+    funcionario = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     nf = models.PositiveIntegerField('Nota Fiscal', null=True, blank=True)
     movimento = models.CharField(max_length=1, choices=MOVIMENTO, blank=True)
 

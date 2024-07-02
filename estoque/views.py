@@ -67,7 +67,9 @@ def add_estoque(request, template_name, movimento, url):
         # Verifica se os formulários são válidos
         if form.is_valid() and formset.is_valid():
             # Salva os formulário
-            form = form.save()
+            form = form.save(commit=False)
+            # Captura o nome do funcionário
+            form.funcionario = request.user
             # Define o tipo de movimento de estoque (entrada ou saída)
             form.movimento = movimento
             form.save()
