@@ -176,7 +176,7 @@ def add_estoque_entrada(request):
     movimento = 'e'
 
     # URL de redirecionamento após salvar os dados
-    url = 'estoque:detalhes_estoque_entrada'
+    url = 'estoque:detalhes_estoque'
 
     # Contexto passado para o template
     contexto = add_estoque(request, nome_template, movimento, url)
@@ -310,7 +310,7 @@ def add_estoque_saida(request):
     movimento = 's'
 
     # URL de redirecionamento após salvar os dados
-    url = 'estoque:detalhes_estoque_saida'
+    url = 'estoque:detalhes_estoque'
 
     # Contexto passado para o template
     contexto = add_estoque(request, nome_template, movimento, url)
