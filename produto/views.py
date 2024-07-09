@@ -25,6 +25,11 @@ def lista_produtos(request):
 
     # Recupera todos os objetos do modelo Produto
     objetos = Produto.objects.all()
+
+    # Procura por um item no campo de busca
+    search = request.GET.get('search')
+    if search:
+        objetos = objetos.filter(produto__icontains=search)
     
     # Define o contexto a ser passado para o template
     contexto = {'lista_objetos': objetos}
