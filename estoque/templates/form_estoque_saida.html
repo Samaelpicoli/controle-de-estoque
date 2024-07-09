@@ -94,15 +94,11 @@ formset de estoque usando JavaScript. -->
 {% endblock conteudo %}
 
 {% block js %}
-
 <script src="{% static 'js/estoque_saida.js' %}"></script>
-
 <script type="text/html" id="item-estoque">
     <!-- Template HTML para novos itens do formset de estoque -->
     <div id="item-__prefix__" class="form-group">
         {{ formset.empty_form|bootstrap }}
     </div>
-
 </script>
-
 {% endblock js %}
