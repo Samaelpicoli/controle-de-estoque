@@ -49,7 +49,7 @@ class ProdutoList(ListView):
     """
     model = Produto
     template_name = 'lista_produtos.html'
-    paginate_by = 4
+    paginate_by = 10
 
 
 def detalhe_produto(request, pk):
