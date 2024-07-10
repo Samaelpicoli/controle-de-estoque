@@ -18,6 +18,9 @@ class Produto(models.Model):
         ponto decimal e 2 dígitos após o ponto decimal.
         estoque (int): Quantidade de unidades disponíveis em estoque.
         estoque_minimo (int): Quantidade mínima recomendada em estoque.
+        categoria (ForeignKey): Referência à categoria do produto. Pode 
+        ser nulo, se a categoria for removida, o campo é definido como 
+        null.
     """
     importado = models.BooleanField(default=False)
     ncm = models.CharField('NCM', max_length=8)
@@ -25,6 +28,11 @@ class Produto(models.Model):
     preco = models.DecimalField('preco', max_digits=7, decimal_places=2)
     estoque = models.IntegerField('estoque')
     estoque_minimo = models.PositiveIntegerField('estoque min', default=0)
+    categoria = models.ForeignKey(
+        'Categoria', 
+        on_delete=models.SET_NULL, 
+        null=True
+    )
 
     class Meta:
         """
@@ -76,3 +84,30 @@ class Produto(models.Model):
             'produto': self.produto,
             'estoque': self.estoque,
         }
+    
+
+class Categoria(models.Model):
+    """
+    Representa uma categoria de produtos.
+
+    Attributes:
+        categoria (str): O nome da categoria. Deve ser único e
+        tem um tamanho máximo de 100 caracteres.
+
+    Meta:
+        ordering (tuple): Define a ordenação padrão para as instâncias
+        do modelo pela categoria em ordem alfabética.
+    """
+    categoria = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ('categoria',)
+
+    def __str__(self):
+        """
+        Retorna a representação em string da instância do modelo.
+
+        Returns:
+            str: O nome da categoria.
+        """
+        return self.categoria
