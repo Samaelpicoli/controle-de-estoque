@@ -202,3 +202,38 @@ def import_csv(request):
     # for POST
     template_name = 'import_produto.html'
     return render(request, template_name)
+
+
+def export_csv(request):
+    """
+    Exporta dados de produtos para um arquivo CSV.
+
+    Este método obtém todos os produtos do banco de dados e escreve
+    suas informações em um arquivo CSV. Após a exportação, uma mensagem
+    de sucesso é adicionada e o usuário é redirecionado para a lista de
+    produtos.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação HTTP.
+
+    Returns:
+        HttpResponseRedirect: Redireciona para a página de lista de 
+        produtos após a exportação bem-sucedida.
+    """
+
+    header = (
+        'importado', 'ncm', 'produto', 'preco', 'estoque', 'estoque_minimo',
+    )
+
+    # Obtém todos os produtos do banco de dados, selecionando 
+    # apenas os campos definidos no cabeçalho
+    produtos = Produto.objects.all().values_list(*header)
+    with open('fix/produtos_exportados.csv', 'w') as csvfile:
+        produto_writer = csv.writer(csvfile)
+        produto_writer.writerow(header)
+        for produto in produtos:
+            produto_writer.writerow(produto)
+
+    # Adiciona uma mensagem de sucesso para ser exibida ao usuários
+    messages.success(request, 'Produtos exportados com sucesso.')
+    return HttpResponseRedirect(reverse('produto:lista_produtos'))

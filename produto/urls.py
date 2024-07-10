@@ -29,4 +29,6 @@ urlpatterns = [
 
     path('import/csv/', views.import_csv, name='import_csv'),
 
+    path('export/csv/', views.export_csv, name='export_csv'),
+
 ]

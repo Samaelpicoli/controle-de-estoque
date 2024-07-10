@@ -1,67 +1,96 @@
 {% extends "base.html" %}
 
-
 {% block conteudo %}
+    <!-- Loop para exibir mensagens de feedback para o usuário -->
+    {% for message in messages %}
+        {% if 'success' in message.tags %}
+            <!-- Mensagem de sucesso com formatação especial -->
+            <p class="alert alert-success" role="alert"><span style="font-weight: bold;">{{ message }}</span></p>
+        {% else %}
+            <!-- Mensagem de erro ou alerta com formatação especial -->
+            <p class="alert alert-danger" role="alert"><span style="font-weight: bold;">{{ message }}</span></p>
+        {% endif %}
+    {% endfor %}
 
-<div class="row">
-    <div class="col-sm-6">
-        <form action="." method="GET" class="form-inline">
-        <input type="text" class="form-control" id="search" name="search" placeholder="Procurar por">
-        <input type="submit" class="btn btn-primary" style="margin-left: 10px;" value="Buscar">
-        </form>
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- Formulário de busca -->
+            <form action="." method="GET" class="form-inline">
+                <!-- Campo de texto para entrada de busca -->
+                <input type="text" class="form-control" id="search" name="search" placeholder="Procurar por">
+                <!-- Botão de submissão para o formulário de busca -->
+                <input type="submit" class="btn btn-primary" style="margin-left: 10px;" value="Buscar">
+            </form>
+        </div>
     </div>
-</div>
 
-<div class="page-header">
-    <h2>Lista de Prdutos
-        <span class="pull-right">
-            <a href="{% url 'produto:adicionar_produto' %}">
-                <button type="button" class="btn btn-primary">
-                    <span class="fa fa-plus"></span> Adicionar
-                </button>
-            </a>
-        </span>
-    </h2>
+    <div class="page-header">
+        <!-- Título da seção de produtos -->
+        <h2>Lista de Produtos
+            <span class="pull-right">
+                <!-- Link para adicionar um novo produto -->
+                <a href="{% url 'produto:adicionar_produto' %}">
+                    <button type="button" class="btn btn-primary">
+                        <span class="fa fa-plus"></span> Adicionar
+                    </button>
+                </a>
+            </span>
+        </h2>
 
-    {% if object_list %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="text-center">Importado</th>
-                    <th>NCM</th>
-                    <th>Produto</th>
-                    <th>Preço</th>
-                    <th class="text-center">Estoque</th>
-                    <th class="text-center">Estoque Mínimo</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for objeto in object_list %}
+        {% if object_list %}
+            <!-- Tabela que exibe a lista de produtos -->
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td class="text-center">
-                            {% if objeto.importado %}
-                                <i class="fa fa-check-circle ok"></i>
-                            {% else %}
-                                <i class="fa fa-minus-circle no"></i>
-                            {% endif %}
-                        </td>
-                        <td>{{ objeto.ncm }}</td>
-                        <td>
-                            <a href="{{ objeto.get_absolute_url }}">{{ objeto.produto }}</a>
-                        </td>
-                        <td>R$ <span class="pull-right">{{ objeto.preco }}</span></td>
-                        <td class="text-center">{{ objeto.estoque }}</td>
-                        <td class="text-center">{{ objeto.estoque_minimo }}</td>
+                        <th class="text-center">Importado</th>
+                        <th>NCM</th>
+                        <th>Produto</th>
+                        <th>Preço</th>
+                        <th class="text-center">Estoque</th>
+                        <th class="text-center">Estoque Mínimo</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p class="alert alert-warning">Sem itens na lista</p>
-    {% endif %}
-</div>
+                </thead>
+                <tbody>
+                    <!-- Loop para exibir cada produto na tabela -->
+                    {% for objeto in object_list %}
+                        <tr>
+                            <td class="text-center">
+                                <!-- Exibe um ícone baseado no status de importação do produto -->
+                                {% if objeto.importado %}
+                                    <i class="fa fa-check-circle ok"></i>
+                                {% else %}
+                                    <i class="fa fa-minus-circle no"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ objeto.ncm }}</td>
+                            <td>
+                                <!-- Link para a página de detalhes do produto -->
+                                <a href="{{ objeto.get_absolute_url }}">{{ objeto.produto }}</a>
+                            </td>
+                            <td>R$ <span class="pull-right">{{ objeto.preco }}</span></td>
+                            <td class="text-center">{{ objeto.estoque }}</td>
+                            <td class="text-center">{{ objeto.estoque_minimo }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <!-- Mensagem exibida quando não há produtos na lista -->
+            <p class="alert alert-warning">Sem itens na lista</p>
+        {% endif %}
+    </div>
 
-<!-- Paginação da seção produtos -->
-{% include "includes/pagination.html" %}
-
+    <!-- Inclui o template de paginação -->
+    {% include "includes/pagination.html" %}
 {% endblock conteudo %}
+
+{% block js %}
+    <script>
+        // Script para remover mensagens de feedback após 2 segundos
+        window.setTimeout(function(){
+            $('.alert').fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 2000);
+    </script>
+{% endblock js %}

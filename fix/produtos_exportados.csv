@@ -1,0 +1,63 @@
+importado,ncm,produto,preco,estoque,estoque_minimo
+False,12892188,Agasalho de moleton,19.30,138,40
+True,14669768,Apontador,15.54,125,30
+False,82331818,Arquivador de 40 mm,14.42,63,50
+False,98108254,Base para tinta,41.38,95,10
+False,62276666,Bloco de papel cavalinho A4,5.67,65,30
+False,81660090,Borracha,15.30,103,10
+False,52498240,Borracha branca,21.23,97,30
+True,44716505,Caderno 100 folhas,6.52,120,10
+False,61556783,Caderno capa dura 200 folhas,24.46,92,20
+False,16356845,Caderno de música,3.08,43,40
+False,11848921,Caderno pautado,22.12,31,30
+False,42473200,Caderno quadriculado,15.75,158,50
+False,97081452,Cadernos pautados,2.55,175,50
+False,39854288,Calculadora,17.84,174,40
+False,60271477,Calculadora não gráfica com funções trigonométricas,6.33,107,50
+False,20263760,Calções,13.68,66,50
+False,30533013,Camiseta,1.43,79,20
+False,80951350,Caneta esferográfica azul,11.42,138,20
+True,19009230,Caneta esferográfica preta,3.71,148,40
+False,62358012,Caneta esferográfica vermelha,13.74,186,50
+False,80951670,Capa arquivadora de desenhos A3,35.88,131,30
+False,38334781,Chinelos de banho,11.30,49,40
+False,17234430,Compasso,15.24,36,50
+False,58697819,Conjunto de guaches,8.60,91,30
+False,64799144,Corretor de fita,21.69,14,40
+False,52181421,Durex,7.43,11,20
+False,16190360,Esferográficas azul,1.19,133,50
+False,43330220,Esferográficas preta,2.49,145,20
+False,50335982,Esferográficas verde,23.43,63,20
+False,81778926,Esferográficas vermelha,23.43,71,10
+False,53394301,Esquadro de 45º,34.55,86,40
+False,23218501,Estojo,10.37,104,10
+False,45333495,Fato de treino,7.35,39,30
+False,76416059,Flauta de bisel,5.13,37,20
+True,54194976,Giz de cera 12 cores,23.66,46,10
+False,14122061,Lapiseira 0.3 mm,10.76,141,40
+True,44284736,Lapiseira 0.5 mm,0.71,199,40
+False,40347035,Lapiseira 0.7 mm,11.28,192,50
+True,67410825,Lápis,3.27,154,20
+False,95686853,Lápis (H HB B e 6B),4.28,194,50
+False,35551053,Lápis HB,8.30,48,30
+False,25171646,Lápis de cera,3.16,20,50
+False,77359983,Lápis de cor,1.62,116,20
+False,73784057,Lápis de cor 24 cores,13.80,103,10
+False,20881967,Marcadores,5.51,159,10
+False,94164016,Mochila,8.61,65,20
+False,35250660,Pano de limpeza,2.30,53,40
+False,31000281,Papel sulfite A4 pacote 100 folhas,18.26,197,20
+True,85605700,Pasta elástica,7.10,48,40
+False,52062047,Pen drive,17.68,139,20
+False,89510296,Pincel n. 2,8.40,47,30
+False,12462499,Pincel n. 8,9.19,26,20
+False,10321310,Produtos de higiene,22.71,40,40
+False,11168615,Régua de 20 cm,21.06,43,10
+False,28135120,Régua de 50 cm,39.86,78,40
+False,29641340,Saco para o equipamento,25.15,57,20
+False,24190558,Sapatilhas de desporto,12.44,31,30
+False,34110222,Stick de cola,10.41,187,10
+False,13750972,Tesoura,9.68,77,10
+False,42752411,Toalha,23.03,159,30
+False,40709929,Transferidor,26.92,32,20
+False,41795932,Tubo de cola,8.27,176,10
