@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+<!-- Carrega a biblioteca widget_tweaks para customizar widgets de formulários -->
+{% load widget_tweaks %}
+
+<!-- Início do bloco 'conteudo' que será inserido no 'base.html' -->
+{% block conteudo %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="myfile">
+    <button type="submit" class="btn btn-success">Upload</button>
+</form>
+
+{% endblock conteudo %}
+<!-- Fim do bloco 'conteudo' -->
+
+
+{% block js %}
+    <script src="{% static 'js/produto.js' %}"></script>
+{% endblock js %}

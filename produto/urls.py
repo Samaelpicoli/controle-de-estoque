@@ -27,4 +27,6 @@ urlpatterns = [
     # URL para retornar os detalhes do produto em formato JSON
     path('<int:pk>/json/', views.produto_json, name='produto_json'),
 
+    path('import/csv/', views.import_csv, name='import_csv'),
+
 ]

@@ -1,11 +1,13 @@
+import csv
+import io
+
+from django.contrib import messages
 from django.shortcuts import render
-
 from django.views.generic import CreateView, UpdateView, ListView
-
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from .models import Produto
-
 from .forms import ProdutoForm
 
 # Create your views here.
@@ -131,3 +133,72 @@ def produto_json(request, pk):
     produto = Produto.objects.filter(pk=pk)
     data = [item.dict_to_json() for item in produto]
     return JsonResponse({'data': data})
+
+
+def save_data(data):
+    '''
+    Salva os dados no banco.
+    
+    Args:
+        data (list): Uma lista de OrderedDicts com os dados do CSV.
+    '''
+    aux = []
+    for item in data:
+        produto = item.get('produto')
+        ncm = str(item.get('ncm'))
+        importado = True if item.get('importado') == 'True' else False
+        preco = item.get('preco')
+        estoque = item.get('estoque')
+        estoque_minimo = item.get('estoque_minimo')
+        obj = Produto(
+            produto=produto,
+            ncm=ncm,
+            importado=importado,
+            preco=preco,
+            estoque=estoque,
+            estoque_minimo=estoque_minimo,
+        )
+        aux.append(obj)
+    Produto.objects.bulk_create(aux)
+
+
+def import_csv(request):
+    """
+    View para importar dados de um arquivo CSV e salvar no 
+    banco de dados.
+
+    Esta view processa o upload de um arquivo CSV contendo 
+    dados de produtos, lê o conteúdo do arquivo, converte os dados em 
+    um formato adequado e salva os dados no banco de dados.
+
+    Args:
+        request (HttpRequest): O objeto da requisição HTTP.
+
+    Returns:
+        HttpResponse: Se a requisição for POST e o arquivo for enviado,
+        redireciona para a lista de produtos após salvar os dados.
+        Se a requisição não for POST, renderiza o template de 
+        upload de arquivo.
+    """
+
+    if request.method == 'POST' and request.FILES['myfle']:
+        # Lê o arquivo enviado
+        myfile = request.FILES['myfile']
+        file = myfile.read().decode('utf-8')
+        
+        # Converte o conteúdo do arquivo em um DictReader
+        reader = csv.DictReader(io.StringIO(file))
+        
+        # Cria uma lista de dicionários a partir do conteúdo do CSV
+        data = [linha for linha in reader]
+        
+        # Salva os dados no banco de dados
+        save_data(data)
+        
+        # Redireciona para a lista de produtos após salvar os dados
+        return HttpResponseRedirect(reverse('produto:lista_produtos'))
+    
+    # Renderiza o template de upload de arquivo se a requisição não 
+    # for POST
+    template_name = 'import_produto.html'
+    return render(request, template_name)
