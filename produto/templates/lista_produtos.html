@@ -23,7 +23,7 @@
         </span>
     </h2>
 
-    {% if lista_objetos %}
+    {% if object_list %}
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -36,7 +36,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for objeto in lista_objetos %}
+                {% for objeto in object_list %}
                     <tr>
                         <td class="text-center">
                             {% if objeto.importado %}
@@ -60,5 +60,8 @@
         <p class="alert alert-warning">Sem itens na lista</p>
     {% endif %}
 </div>
+
+<!-- Paginação da seção produtos -->
+{% include "includes/pagination.html" %}
 
 {% endblock conteudo %}

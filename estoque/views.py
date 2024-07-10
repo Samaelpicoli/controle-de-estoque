@@ -334,10 +334,17 @@ def add_estoque_saida(request):
 class ListaEstoqueEntrada(ListView):
     """
     Classe-based view para listar as entradas de estoque.
+
+    Atributos:
+        model (Model): O modelo que será utilizado na listagem.
+        template_name (str): O nome do template que será renderizado.
+        paginate_by (int): Quantidade de itens por página na paginação.
     """
     model = EstoqueEntrada
     template_name = 'lista_estoque.html'
     context_object_name = 'object_list'
+    # A cada 10 itens terá uma nova página para listagem dos itens
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         """
@@ -362,6 +369,9 @@ class ListaEstoqueSaida(ListView):
 
     # Define o template a ser renderizado
     template_name = 'lista_estoque.html'  
+
+    # A cada 10 itens terá uma nova página para listagem dos itens
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         """

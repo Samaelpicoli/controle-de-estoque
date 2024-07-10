@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 
 from django.http import JsonResponse
 
@@ -37,6 +37,19 @@ def lista_produtos(request):
     # Renderiza o template com o contexto
     return render(request, template_name=nome_template, context=contexto)
 
+
+class ProdutoList(ListView):
+    """
+    Classe-based view para listar produtos.
+    
+    Atributos:
+        model (Model): O modelo que será utilizado na listagem.
+        template_name (str): O nome do template que será renderizado.
+        paginate_by (int): Quantidade de itens por página na paginação.
+    """
+    model = Produto
+    template_name = 'lista_produtos.html'
+    paginate_by = 4
 
 
 def detalhe_produto(request, pk):
