@@ -12,11 +12,11 @@ from produto.models import Produto
 
 from .models import EstoqueEntrada, EstoqueSaida, EstoqueItens, Estoque
 
-from .forms import EstoqueForm, EstoqueItensForm
+from .forms import EstoqueForm, EstoqueItensEntradaForm, EstoqueItensSaidaForm
 
 # Create your views here.
 
-def add_estoque(request, template_name, movimento, url):
+def add_estoque(request, form_inline, template_name, movimento, url):
     """
     Adiciona uma nova entrada ou saída de estoque.
 
@@ -44,7 +44,7 @@ def add_estoque(request, template_name, movimento, url):
     item_estoque_formset = inlineformset_factory(
         Estoque,
         EstoqueItens,
-        form = EstoqueItensForm,
+        form = form_inline,
         extra = 0,
         can_delete=False,
         min_num = 1,
@@ -183,8 +183,9 @@ def add_estoque_entrada(request):
     # URL de redirecionamento após salvar os dados
     url = 'estoque:detalhes_estoque'
 
+    form_inline = EstoqueItensEntradaForm
     # Contexto passado para o template
-    contexto = add_estoque(request, nome_template, movimento, url)
+    contexto = add_estoque(request, form_inline, nome_template, movimento, url)
 
      # Verifica se a chave 'pk' está presente no contexto 
      # (indicando que os dados foram salvos)
@@ -318,8 +319,10 @@ def add_estoque_saida(request):
     # URL de redirecionamento após salvar os dados
     url = 'estoque:detalhes_estoque'
 
+    form_inline = EstoqueItensSaidaForm
+
     # Contexto passado para o template
-    contexto = add_estoque(request, nome_template, movimento, url)
+    contexto = add_estoque(request, form_inline, nome_template, movimento, url)
 
     # Verifica se a chave 'pk' está presente no contexto 
     # (indicando que os dados foram salvos)

@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import io
 
 from django.contrib import messages
@@ -6,9 +7,12 @@ from django.shortcuts import render
 from django.views.generic import CreateView, UpdateView, ListView
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
+import pandas as pd
 
 from .models import Produto
 from .forms import ProdutoForm
+from produto.actions.import_xlsx import importar_xlsx as actions_importar_xlsx
+from produto.actions.export_xlsx import exportar_xlsx as actions_exportar_xlsx
 
 # Create your views here.
 
@@ -236,4 +240,92 @@ def export_csv(request):
 
     # Adiciona uma mensagem de sucesso para ser exibida ao usuários
     messages.success(request, 'Produtos exportados com sucesso.')
+    return HttpResponseRedirect(reverse('produto:lista_produtos'))
+
+
+def importar_xlsx(request):
+    """
+    View para importar produtos de um arquivo XLSX.
+
+    Lê um arquivo XLSX contendo dados de produtos e salva esses 
+    dados no banco de dados.
+
+    Args:
+        request (HttpRequest): A solicitação HTTP recebida pelo 
+        servidor.
+
+    Returns:
+        HttpResponseRedirect: Redireciona o usuário para a lista 
+        de produtos após a importação bem-sucedida.
+    """
+    filename = 'fix/produtos.xlsx'
+    actions_importar_xlsx(filename)
+    messages.success(request, 'Produtos importados com sucesso.')
+    return HttpResponseRedirect(reverse('produto:lista_produtos'))
+
+
+def export_xlsx(request):
+    """
+    View para exportar produtos para um arquivo XLSX.
+
+    Gera um arquivo XLSX contendo dados de produtos e o envia 
+    como resposta HTTP para download.
+
+    Args:
+        request (HttpRequest): A solicitação HTTP recebida pelo 
+        servidor.
+
+    Returns:
+        HttpResponse: Resposta HTTP contendo o arquivo XLSX para 
+        download.
+    """
+    data = datetime.now().strftime('%Y-%m-%d')
+    model = 'Produto'
+    filename = 'produtos_exportados.xlsx'
+    _filename = filename.split('.')
+    filename_final = f'{_filename[0]}_{data}.{_filename[1]}'
+
+    # Obtem os dados dos produtos a serem exportados
+    queryset = Produto.objects.all().values_list(
+        'importado',
+        'ncm',
+        'produto',
+        'preco',
+        'estoque',
+        'estoque_minimo',
+        'categoria__categoria'
+    )
+
+    # Define as colunas do arquivo XLSX
+    columns = (
+        'Importado', 
+        'NCM', 
+        'Produto', 
+        'Preço', 
+        'Estoque', 
+        'Estoque Minimo', 
+        'Categoria'
+    )
+
+    # Gera a resposta HTTP com o arquivo XLSX
+    response = actions_exportar_xlsx(model, filename_final, queryset, columns)
+    return response
+
+
+def import_csv_with_pandas(request):
+    filename = 'fix/produtos.csv'
+    df = pd.read_csv(filename)
+    aux = []
+    for row in df.values:
+        obj = Produto(
+            produto=row[0],
+            ncm = row[1],
+            importado = row[2],
+            preco = row[3],
+            estoque = row[4],
+            estoque_minimo = row[5]
+        )
+        aux.append(obj)
+    Produto.objects.bulk_create(aux)
+    messages.success(request, 'Produtos importados com sucesso.')
     return HttpResponseRedirect(reverse('produto:lista_produtos'))

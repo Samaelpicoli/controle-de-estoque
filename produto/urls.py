@@ -31,4 +31,14 @@ urlpatterns = [
 
     path('export/csv/', views.export_csv, name='export_csv'),
 
+    path('import/excel/', views.importar_xlsx, name='importar_xlsx'),
+    
+    path('export/excel', views.export_xlsx, name='export_xlsx'),
+
+    path(
+        'import/csv/pandas',
+        views.import_csv_with_pandas,
+        name='import_csv_with_pandas'
+    )
+
 ]
